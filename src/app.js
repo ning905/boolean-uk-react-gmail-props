@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Emails } from "./components/Emails";
+import { SingleEmail } from "./components/SingleEmail";
 
 import initialEmails from "./data/emails";
 
@@ -9,6 +10,9 @@ function App() {
   const [emails, setEmails] = useState(initialEmails);
   const [hideRead, setHideRead] = useState(false);
   const [currentTab, setCurrentTab] = useState("inbox");
+  const [emailIDSelected, setEmailIDSelected] = useState();
+  const [searchInput, setSearchInput] = useState("");
+  let selectedEmail;
 
   const unreadEmails = emails.filter((email) => !email.read);
   const starredEmails = emails.filter((email) => email.starred);
@@ -31,6 +35,22 @@ function App() {
     setEmails(updatedEmails);
   };
 
+  const selectEmail = (email) => {
+    setEmailIDSelected(email.id);
+  };
+
+  const unselectEmail = () => {
+    setEmailIDSelected();
+  };
+
+  const getSearchInput = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  if (emailIDSelected) {
+    selectedEmail = emails.find((email) => email.id === emailIDSelected);
+  }
+
   return (
     <div className="app">
       <header className="header">
@@ -46,7 +66,12 @@ function App() {
         </div>
 
         <div className="search">
-          <input className="search-bar" placeholder="Search mail" />
+          <input
+            className="search-bar"
+            placeholder="Search mail"
+            onChange={getSearchInput}
+            value={searchInput}
+          />
         </div>
       </header>
       <nav className="left-menu">
@@ -77,15 +102,25 @@ function App() {
           </li>
         </ul>
       </nav>
-      <main className="emails">
-        <Emails
-          emails={emails}
-          hideRead={hideRead}
-          currentTab={currentTab}
-          toggleRead={toggleRead}
+      {selectedEmail ? (
+        <SingleEmail
+          email={selectedEmail}
           toggleStar={toggleStar}
+          unselectEmail={unselectEmail}
         />
-      </main>
+      ) : (
+        <main className="emails">
+          <Emails
+            emails={emails}
+            hideRead={hideRead}
+            currentTab={currentTab}
+            searchInput={searchInput}
+            toggleRead={toggleRead}
+            toggleStar={toggleStar}
+            selectEmail={selectEmail}
+          />
+        </main>
+      )}
     </div>
   );
 }

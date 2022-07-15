@@ -1,0 +1,18 @@
+.selected-email {
+    display: grid;
+    grid-template:
+        "back back"30px "star title"50px "sender sender"30px /50px 1fr;
+    align-items: center;
+}
+
+.selected-email .star {
+    grid-area: star;
+}
+
+.selected-email .email-title {
+    grid-area: title;
+}
+
+.selected-email .email-sender {
+    grid-area: sender;
+}

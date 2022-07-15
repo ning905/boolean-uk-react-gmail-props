@@ -8,7 +8,15 @@ const getReadEmails = (emails) => emails.filter((email) => !email.read);
 const getStarredEmails = (emails) => emails.filter((email) => email.starred);
 
 export const Emails = (props) => {
-  const { emails, hideRead, currentTab, toggleRead, toggleStar } = props;
+  const {
+    emails,
+    hideRead,
+    currentTab,
+    searchInput,
+    toggleRead,
+    toggleStar,
+    selectEmail,
+  } = props;
 
   let filteredEmails = emails;
 
@@ -17,14 +25,20 @@ export const Emails = (props) => {
   if (currentTab === "starred")
     filteredEmails = getStarredEmails(filteredEmails);
 
+  if (searchInput)
+    filteredEmails = filteredEmails.filter((email) =>
+      email.title.toLowerCase().includes(searchInput.toLowerCase())
+    );
+
   return (
     <ul>
       {filteredEmails.map((email, index) => (
         <Email
+          key={index}
           email={email}
-          index={index}
           toggleRead={toggleRead}
           toggleStar={toggleStar}
+          selectEmail={selectEmail}
         />
       ))}
     </ul>

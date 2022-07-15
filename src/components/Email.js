@@ -3,10 +3,13 @@ import React from "react";
 import "../styles/email.css";
 
 export const Email = (props) => {
-  const { email, index, toggleRead, toggleStar } = props;
+  const { email, toggleRead, toggleStar, selectEmail } = props;
 
   return (
-    <li key={index} className={`email ${email.read ? "read" : "unread"}`}>
+    <li
+      className={`email ${email.read ? "read" : "unread"}`}
+      onClick={() => selectEmail(email)}
+    >
       <div className="select">
         <input
           className="select-checkbox"
